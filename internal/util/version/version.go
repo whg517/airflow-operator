@@ -6,7 +6,7 @@ import (
 )
 
 // Use `-ldflags` to set these variables at build time
-// Example: go build -ldflags "-X 'github.com/yourusername/yourapp/internal/util/version.BuildVersion=1.0.0' -X 'github.com/yourusername/yourapp/internal/util/version.GitCommit=abc123' -X 'github.com/yourusername/yourapp/internal/util/version.BuildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+// Example: go build -ldflags "-X 'github.com/zncdatadev/airflow-operator/internal/util/version.BuildVersion=1.0.0' -X 'github.com/zncdatadev/airflow-operator/internal/util/version.GitCommit=abc123' -X 'github.com/zncdatadev/airflow-operator/internal/util/version.BuildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
 // to set the version information dynamically.
 var (
 	BuildVersion = "0.0.0-dev"
