@@ -1,12 +1,15 @@
-name: Tests
+name: Test
 
 on:
   push:
+    branches:
+      - "main"
   pull_request:
 
+
 jobs:
-  test:
-    name: Run on Ubuntu
+  golang-test:
+    name: Golang Test
     runs-on: ubuntu-latest
     steps:
       - name: Clone the code
@@ -21,3 +24,4 @@ jobs:
         run: |
           go mod tidy
           make test
+

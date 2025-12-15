@@ -2,11 +2,14 @@ name: Lint
 
 on:
   push:
+    branches:
+      - "main"
   pull_request:
 
+
 jobs:
-  lint:
-    name: Run on Ubuntu
+  golang-lint:
+    name: golang-lint
     runs-on: ubuntu-latest
     steps:
       - name: Clone the code
@@ -21,3 +24,4 @@ jobs:
         uses: golangci/golangci-lint-action@v7
         with:
           version: v2.0.2
+
