@@ -48,12 +48,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: '~1.23'
+          go-version-file: go.mod
 
       - name: Running Tests
         run: |
@@ -61,7 +61,7 @@ jobs:
           make test
 
 
-  chainsaw-test:
+  chainsaw-e2e:
     name: Chainsaw Test
     runs-on: ubuntu-latest
     strategy:
@@ -69,30 +69,30 @@ jobs:
         k8s-version: ['1.26.15', '1.27.16']
     steps:
       - name: Clone the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: '~1.23'
+          go-version-file: go.mod
 
-      - name: Create KinD clustet pur
+      - name: Create KinD cluster
         env:
           KIND_K8S_VERSION: ${{ matrix.k8s-version}}
-          KUBECONFIG: kind-kubeconfig-${{ matrix.k8s-version }}
-        run: make kind-create
+          CHAINSAW_KUBECONFIG: kind-kubeconfig-${{ matrix.k8s-version }}
+        run: make setup-chainsaw-cluster
 
-      - name: Chainsaw test setup
+      - name: Setup Chainsaw
         env:
           KIND_K8S_VERSION: ${{ matrix.k8s-version }}
-          KUBECONFIG: kind-kubeconfig-${{ matrix.k8s-version }}
-        run: make chainsaw-setup
+          CHAINSAW_KUBECONFIG: kind-kubeconfig-${{ matrix.k8s-version }}
+        run: make setup-chainsaw-e2e
 
-      - name: Test with Chainsaw
+      - name: Run chainsaw-e2e
         env:
           KIND_K8S_VERSION: ${{ matrix.k8s-version }}
-          KUBECONFIG: kind-kubeconfig-${{ matrix.k8s-version }}
-        run: make chainsaw-test
+          CHAINSAW_KUBECONFIG: kind-kubeconfig-${{ matrix.k8s-version }}
+        run: make chainsaw-e2e
 
 
   release-image:
@@ -103,10 +103,10 @@ jobs:
       - markdown-lint
       - golang-lint
       - golang-test
-      - chainsaw-test
+      - chainsaw-e2e
     steps:
       - name: Clone the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
